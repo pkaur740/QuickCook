@@ -128,9 +128,9 @@
                 var text = $('#text').val();
 
                 db.collection("recipes").doc("yPjNIQwpl23G46YQK6xu").collection("reviews").add({
-                    cookTime: "DEBUG",
+                    cookTime: "120 mins",
                     text: text,
-                    title: "DEBUGDEBUGDEBUG"
+                    title: "A recipe"
                 }); 
                 setTimeout(function(){ window.location.replace("submit.html"); }, 1000);
 
