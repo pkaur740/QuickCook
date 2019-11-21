@@ -11,15 +11,16 @@
     <link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/3.5.2/firebaseui.css" />
     <script>
         var firebaseConfig = {
-            apiKey: "AIzaSyCJTf1-8PVxe2_WjgPXZXNhTrqZwqQhAcQ",
-            authDomain: "adamsawuss.firebaseapp.com",
-            databaseURL: "https://adamsawuss.firebaseio.com",
-            projectId: "adamsawuss",
-            storageBucket: "adamsawuss.appspot.com",
-            messagingSenderId: "15278214023",
-            appId: "1:15278214023:web:d7483f38c760f8d4caa122"
+            apiKey: "AIzaSyB8_rgXNr8HKUS5EEj8orWw8CsfuH_abXA",
+            authDomain: "quick-c73d3.firebaseapp.com",
+            databaseURL: "https://quick-c73d3.firebaseio.com",
+            projectId: "quick-c73d3",
+            storageBucket: "quick-c73d3.appspot.com",
+            messagingSenderId: "886931690680",
+            appId: "1:886931690680:web:833bfd4b71e4bedf7c104d"
         };
         firebase.initializeApp(firebaseConfig);
+        var db = firebase.firestore();
     </script>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
@@ -49,6 +50,12 @@
             margin-left: 10%;
             width: 80%;
             background-color: white;
+        }
+        .review {
+            background-color: red;
+            border-style: solid;
+            width: 80%;
+            margin: auto;
         }
     </style>
 </head>
@@ -98,8 +105,26 @@
         <br />Step #4 <br /><br />
         <br />
     </div>
+    
+    <div id="review_container">
+    
+    </div>
 
+    <script>
+    function reviewList() {
+        db.collection("recipes").doc("yPjNIQwpl23G46YQK6xu").collection("reviews").get().then(function(snap) {
+                snap.forEach(review => {
+                var n = review.data().text;
+                var tempDiv = document.createElement("div");
+                tempDiv.className = "review";
+                tempDiv.innerHTML = n;
+                document.getElementById("review_container").appendChild(tempDiv);
 
+            })
+        })
+    }
+        reviewList();
+    </script>
 </body>
 
 </html>
