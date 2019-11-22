@@ -27,10 +27,8 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-    <style>
-        .header {
-            text-align: center;
-        }
+    <style type="text/css" scoped>
+
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <style>
@@ -39,6 +37,19 @@
         }
     </style>
     <style>
+        .header {
+            text-align: center;
+        }
+        .scrollspy-example {
+            margin: auto;
+            background-color: white;
+            position: relative;
+            height: 200px;
+            margin-top: .5rem;
+            overflow: auto;
+            width: 80%;
+
+        }
         #dec {
             color: white;
             background-color: #EF8872;
@@ -57,10 +68,18 @@
             width: 80%;
             margin: auto;
         }
+        #navbar-example2 {
+            width: 80%;
+            margin: auto;
+        }
+        .fa {
+            font-size: 20px;
+        }
     </style>
 </head>
 
 <body style="background-color: #A4EBE9;">
+    
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01"
             aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
@@ -105,21 +124,46 @@
         <br />Step #4 <br /><br />
         <br />
     </div>
-    
-    <div id="review_container">
-    
-    </div>
+    <br>
+    <nav id="navbar-example2" class="navbar navbar-light bg-light">
 
+    <h3 class="navbar-brand">Project Name</h3>
+    </nav>
+    <form action="review.html">
+        <button style="margin-left: 10%; margin-top: 1vh;" type="submit" class="btn btn-primary">Rate And Review</button>
+    </form>
+    <div data-spy="scroll" style="height: 50vh;" data-target="#navbar-example2" id="review_container" data-offset="0" class="scrollspy-example">
+    </div>
+    <br>
     <script>
     function reviewList() {
         db.collection("recipes").doc("yPjNIQwpl23G46YQK6xu").collection("reviews").get().then(function(snap) {
                 snap.forEach(review => {
                 var n = review.data().text;
+                var rating = review.data().overallRating;
+                var temph4 = document.createElement("h4");
                 var tempDiv = document.createElement("div");
-                tempDiv.className = "review";
+                var tempStar = document.createElement("div");
+                while (rating > 0) {
+                    if (rating >= 1) {
+                        var tempSpan = document.createElement("span");
+                        tempSpan.className = "fa fa-star checked";
+                        tempStar.appendChild(tempSpan);
+                        rating -= 1;
+                    } else if (rating > 0.4) {
+                        var tempSpan = document.createElement("span");
+                        tempSpan.className = "fa fa-star-half-o checked";
+                        tempStar.appendChild(tempSpan);
+                        rating -= 0.5;
+                    }
+                }
                 tempDiv.innerHTML = n;
+                
+                temph4.innerHTML = review.data().author;
+                document.getElementById("review_container").appendChild(temph4);
+                    document.getElementById("review_container").appendChild(tempStar);
                 document.getElementById("review_container").appendChild(tempDiv);
-
+                
             })
         })
     }

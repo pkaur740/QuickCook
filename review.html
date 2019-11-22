@@ -37,105 +37,116 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <style>
-    .rating {
-  display: inline-block;
-  position: relative;
-  height: 50px;
-  line-height: 50px;
-  font-size: 50px;
-}
+        
+        #container {
+            width: 80%;
+            margin: auto;
+        }
 
-.rating label {
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 100%;
-  cursor: pointer;
-}
 
-.rating label:last-child {
-  position: static;
-}
 
-.rating label:nth-child(1) {
-  z-index: 5;
-}
-
-.rating label:nth-child(2) {
-  z-index: 4;
-}
-
-.rating label:nth-child(3) {
-  z-index: 3;
-}
-
-.rating label:nth-child(4) {
-  z-index: 2;
-}
-
-.rating label:nth-child(5) {
-  z-index: 1;
-}
-
-.rating label input {
-  position: absolute;
-  top: 0;
-  left: 0;
-  opacity: 0;
-}
-
-.rating label .icon {
+.rating { 
+  border: none;
   float: left;
-  color: transparent;
 }
 
-.rating label:last-child .icon {
-  color: #000;
+.rating > input { display: none; } 
+.rating > label:before { 
+  margin: 5px;
+  font-size: 1.25em;
+  font-family: FontAwesome;
+  display: inline-block;
+  content: "\f005";
 }
 
-.rating:not(:hover) label input:checked ~ .icon,
-.rating:hover label:hover input ~ .icon {
-  color: #09f;
+.rating > .half:before { 
+  content: "\f089";
+  position: absolute;
 }
 
-.rating label input:focus:not(:checked) ~ .icon:last-child {
-  color: #000;
-  text-shadow: 0 0 5px #09f;
+.rating > label { 
+  color: #ddd; 
+ float: right; 
+}
+
+/***** CSS Magic to Highlight Stars on Hover *****/
+
+.rating > input:checked ~ label, /* show gold star when clicked */
+.rating:not(:checked) > label:hover, /* hover current star */
+.rating:not(:checked) > label:hover ~ label { color: #FFD700;  } /* hover previous stars in list */
+
+.rating > input:checked + label:hover, /* hover current star when changing rating */
+.rating > input:checked ~ label:hover,
+.rating > label:hover ~ input:checked ~ label, /* lighten current selection */
+.rating > input:checked ~ label:hover ~ label { color: #FFED85;  } 
+.full {
+    font-size: 24px;
+}
+.half {
+    font-size: 24px;
 }
 </style>
 </head>
 
 <body>
+    
+    <div id="container">
     <h1>Review</h1>
     <h2>Rating</h2>
+    <fieldset class="rating">
+        <input type="radio" id="star5" name="rating" value="5" /><label class = "full" for="star5" title="Awesome - 5 stars"></label>
+        <input type="radio" id="star4half" name="rating" value="4.5" /><label class="half" for="star4half" title="Pretty good - 4.5 stars"></label>
+        <input type="radio" id="star4" name="rating" value="4" /><label class = "full" for="star4" title="Pretty good - 4 stars"></label>
+        <input type="radio" id="star3half" name="rating" value="3.5" /><label class="half" for="star3half" title="Meh - 3.5 stars"></label>
+        <input type="radio" id="star3" name="rating" value="3" /><label class = "full" for="star3" title="Meh - 3 stars"></label>
+        <input type="radio" id="star2half" name="rating" value="2.5" /><label class="half" for="star2half" title="Kinda bad - 2.5 stars"></label>
+        <input type="radio" id="star2" name="rating" value="2" /><label class = "full" for="star2" title="Kinda bad - 2 stars"></label>
+        <input type="radio" id="star1half" name="rating" value="1.5" /><label class="half" for="star1half" title="Meh - 1.5 stars"></label>
+        <input type="radio" id="star1" name="rating" value="1" /><label class = "full" for="star1" title="Sucks big time - 1 star"></label>
+        <input type="radio" id="starhalf" name="rating" value=".5" /><label class="half" for="starhalf" title="Sucks big time - 0.5 stars"></label>
+    </fieldset>
 
     <form id="textArea" onsubmit="return createReview();">
-        <textarea id="text" class="form-control form-control-lg" value="" style="height: 20vh;" type="text" placeholder=".form-control-lg"></textarea>
-        <button type="submit" class="btn btn-primary btn-lg btn-block">Submit</button>
+        <textarea id="text" class="form-control form-control-lg" value="" style="height: 20vh;" type="text" placeholder="" required="required"></textarea>
+        <h5>Cook Time - Optional</h5>
+        <input id="time" style="width: 15vw;" type="number" name="time" min="1" max="600">
+
+        <button type="submit" style="margin-top: 2vh;" class="btn btn-primary btn-lg btn-block">Submit</button>
+        
     
     </form>
-
+</div>
 
 
     <script>
         //Script for creating a review and adding it to firebase.
+        
+        var overallTempRating = 0;
         var hasClicked = false;
+        $("input").on("click", function(event) {
+            overallTempRating = event.target.value;
+            console.log(overallTempRating);
+        });
         function createReview() {
-            if (!hasClicked && ($('#text').val())) {
+            if (!hasClicked && ($('#text').val()) && overallTempRating != 0) {
                 console.log("hello");
                 hasClicked = true;
                 var text = $('#text').val();
+                var time = $('#time').val();
 
                 db.collection("recipes").doc("yPjNIQwpl23G46YQK6xu").collection("reviews").add({
-                    cookTime: "120 mins",
+                    overallRating: overallTempRating,
+                    cookTime: time,
+                    author: "someguy",
                     text: text,
                     title: "A recipe"
-                }); 
-                setTimeout(function(){ window.location.replace("submit.html"); }, 1000);
+                }).then(function() {window.location.replace("submit.html");}); 
 
                 return false;
             }
+            return false;
             
         }
     </script>
