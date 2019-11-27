@@ -11,15 +11,16 @@
     <link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/3.5.2/firebaseui.css" />
     <script>
         var firebaseConfig = {
-            apiKey: "AIzaSyCJTf1-8PVxe2_WjgPXZXNhTrqZwqQhAcQ",
-            authDomain: "adamsawuss.firebaseapp.com",
-            databaseURL: "https://adamsawuss.firebaseio.com",
-            projectId: "adamsawuss",
-            storageBucket: "adamsawuss.appspot.com",
-            messagingSenderId: "15278214023",
-            appId: "1:15278214023:web:d7483f38c760f8d4caa122"
+            apiKey: "AIzaSyB8_rgXNr8HKUS5EEj8orWw8CsfuH_abXA",
+            authDomain: "quick-c73d3.firebaseapp.com",
+            databaseURL: "https://quick-c73d3.firebaseio.com",
+            projectId: "quick-c73d3",
+            storageBucket: "quick-c73d3.appspot.com",
+            messagingSenderId: "886931690680",
+            appId: "1:886931690680:web:833bfd4b71e4bedf7c104d"
         };
         firebase.initializeApp(firebaseConfig);
+        var db = firebase.firestore();
     </script>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
@@ -78,7 +79,8 @@
     <div id="dec">
         <br />Here are the recipes based on your ingredients selected:<br /><br />
     </div>
-
+    <div id="recipe_container">
+    </div>
     <div class="recipes">
         <div style="float: right;">Time</div>
         <br />Recipe #1 <br /><br />
@@ -125,7 +127,29 @@
         <br />
     </div>
 
+    <script>
+        let checker = (arr, target) => target.every(v => arr.includes(v));
+        //Choices that were passed on to us
+        var choices = JSON.parse(localStorage.getItem("choices"));
+        //function that should generate divs. 
+        function parseChoices() {
+            var counter = 0;
+            db.collection('recipes').get().then(function (snapshot) {
+                snapshot.forEach(function(doc) {
+                    //Checks if document contains all elements of ingredients. Can't get .where() to work.
+                    if (checker(doc.data().ingredients, choices)) {
+                        var tempDiv = document.createElement("div");
+                        tempDiv.innerHTML = doc.data().name;
+                        tempDiv.className = "recipes";
+                        console.log("Code goes heeeeeeeeeere");
+                        document.getElementById("recipe_container").appendChild(tempDiv);
+                    };
+                })
+            });
+        }
+        parseChoices();
 
+    </script>
 </body>
 
 </html>

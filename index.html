@@ -1,10 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head> 
-        <title>Quickcook</title>
-        <meta charset="UTF-8"/>
-    </head>
-    <body>
 <head>
     
     <title>QuickCook</title>
@@ -112,7 +107,7 @@
         <br>
         <br>
 
-        <form autocomplete="off" id="form'" style="text-align: center;" onsubmit="return createListing(); this.reset(); return false;">
+        <form autocomplete="off" id="form" style="text-align: center;" onsubmit="return createListing(); this.reset(); return false;">
             <div class="autocomplete" style="width: 80vw; margin: auto; display: flex; align-items: center; justify-content: center;">
                 <input id="myInput" value="" class="form-control mb-2 mr-sm-2" type="text" placeholder="Enter Ingredients">
                 <button type="submit" class="btn btn-primary mb-2">Submit</button>
@@ -128,23 +123,35 @@
     </div>
     <br>
     <br>
-    <form style="text-align: center;">
+    <form id="submitForm" style="text-align: center;" onsubmit="return false;">
         <input id="submit" class="btn btn-secondary " type="submit" value="Search" style="width: 70vw;">
     </form>
-        <br>
-        <br>
+    <br>
+    <br>
     </div>
 
     
     <script>
+        var choices = [];
+        $("#submitForm").on("click", function(event) {
+            console.log("heyo");
+            localStorage.setItem("choices", JSON.stringify(choices));
+            window.location.href = "RecipePage.html";
+            for (index = 0; index < choices.length; index++) { 
+                console.log(choices[index]); 
+            } 
+        });
         function createListing() {
             var element = document.createElement("button");
-            element.className = "btn btn-primary";
-            element.innerHTML =  $('form input[type="text"]').val();
-            document.getElementById('ingredient-list').appendChild(element)
-            document.getElementById('submit').className = 'btn btn-info';
-            $('form input[type="text"]').val('');
-            
+            var text = $('form input[type="text"]').val()
+            if (ingredients.includes(text.toLowerCase())) {
+                element.className = "btn btn-primary";
+                element.innerHTML =  text.charAt(0).toUpperCase() + text.slice(1);
+                document.getElementById('ingredient-list').appendChild(element)
+                document.getElementById('submit').className = 'btn btn-info';
+                choices.push(element.innerHTML.toLowerCase());
+                $('form input[type="text"]').val('');
+            }
             return false;
             
         }
@@ -226,8 +233,9 @@
             closeAllLists(e.target);
         });
     }
-    var ingredients = ["Carrots","Rice","Spam"];
+    var ingredients = ["cheese", "bread", "spam"];
     autocomplete(document.getElementById("myInput"), ingredients);
+
     </script>
 </body>
 
