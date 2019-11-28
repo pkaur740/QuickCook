@@ -76,9 +76,9 @@
 
     <br /><br />
 
-    <div id="dec">
+    <p id="dec">
         <br />Here are the recipes based on your ingredients selected:<br /><br />
-    </div>
+    </p>
     <div id="recipe-container">
         <div class="recipes">
             <!-- <div style="float: right;">Time</div> -->
@@ -135,26 +135,25 @@
         function parseChoices() {
             var counter = 0;
             db.collection('recipes').get().then(function (snapshot) {
-                snapshot.forEach(function (doc) {
-                    //Checks if document contains all elements of ingredients. Can't get .where() to work.
-                    if (checker(doc.data().ingredients, choices)) {
-                        
-                        var divs = document.querySelectorAll('div')
-
-                        for (var i = 0; i < divs.length; i++) {
+                var divs = document.querySelectorAll('div')
+                for (var i = 0; i < divs.length; i++) {
+                    snapshot.forEach(function (doc) {
+                        //Checks if document contains all elements of ingredients. Can't get .where() to work.
+                        if (checker(doc.data().ingredients, choices)) {
                             var tempDiv = document.createElement("div");
-
                             tempDiv.innerHTML = doc.data().name;
                             tempDiv.className = "recipes";
                             console.log("Code goes heeeeeeeeeere");
                             divs[i].appendChild(tempDiv);
+                        } else {
+                            console.log("Doesn't print anything");
                         }
+                        
+                            
+                        
+                    })
+                }
 
-
-                    } else {
-                        console.log("Doesn't print anything");
-                    }
-                })
             });
         }
         parseChoices();
