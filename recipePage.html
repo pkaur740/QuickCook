@@ -62,7 +62,7 @@
             aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="navbar-collapse collapse" id="navbarTogglerDemo01" style="">
+        <span class="navbar-collapse collapse" id="navbarTogglerDemo01" style="">
             <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
                 <li class="nav-item active">
                     <a class="nav-link" href="#!">Home <span class="sr-only">(current)</span></a>
@@ -71,7 +71,7 @@
                     <a class="nav-link disabled" href="#!">Disabled</a>
                 </li>
             </ul>
-        </div>
+        </span>
     </nav>
 
     <br /><br />
@@ -136,21 +136,30 @@
             var counter = 0;
             db.collection('recipes').get().then(function (snapshot) {
                 var divs = document.querySelectorAll('div')
-                for (var i = 0; i < divs.length; i++) {
+                console.log("length" + divs.length);
+                for (var i = 0; i < divs.length - 1; i++) {
                     snapshot.forEach(function (doc) {
                         //Checks if document contains all elements of ingredients. Can't get .where() to work.
                         if (checker(doc.data().ingredients, choices)) {
                             var tempDiv = document.createElement("div");
-                            tempDiv.innerHTML = doc.data().name;
-                            tempDiv.className = "recipes";
-                            console.log("Code goes heeeeeeeeeere");
-                            divs[i].appendChild(tempDiv);
+
+                            var arr = [];
+                            var data = doc.data().name;
+                            arr.push(data);
+                            console.log(arr);
+                            for (j = 0; j < arr.length; j++) {
+                                tempDiv.innerHTML = arr[j];
+                                tempDiv.className = "recipes";
+                                console.log("Code goes heeeeeeeeeere");
+                                divs[i].appendChild(tempDiv);
+                            }
+
                         } else {
                             console.log("Doesn't print anything");
                         }
-                        
-                            
-                        
+
+
+
                     })
                 }
 
