@@ -62,7 +62,7 @@
             aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="navbar-collapse collapse" id="navbarTogglerDemo01" style="">
+        <span class="navbar-collapse collapse" id="navbarTogglerDemo01" style="">
             <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
                 <li class="nav-item active">
                     <a class="nav-link" href="#!">Home <span class="sr-only">(current)</span></a>
@@ -71,60 +71,60 @@
                     <a class="nav-link disabled" href="#!">Disabled</a>
                 </li>
             </ul>
-        </div>
+        </span>
     </nav>
 
     <br /><br />
 
-    <div id="dec">
+    <p id="dec">
         <br />Here are the recipes based on your ingredients selected:<br /><br />
-    </div>
-    <div id="recipe_container">
-    </div>
-    <div class="recipes">
-        <div style="float: right;">Time</div>
-        <br />Recipe #1 <br /><br />
-        <span class="fa fa-star checked"></span>
-        <span class="fa fa-star checked"></span>
-        <span class="fa fa-star checked"></span>
-        <span class="fa fa-star checked"></span>
-        <span class="fa fa-star checked"></span>
+    </p>
+    <div id="recipe-container">
+        <div class="recipes">
+            <!-- <div style="float: right;">Time</div> -->
+            <!-- <br />Recipe #1 <br /><br />
+            <span class="fa fa-star checked"></span>
+            <span class="fa fa-star checked"></span>
+            <span class="fa fa-star checked"></span>
+            <span class="fa fa-star checked"></span>
+            <span class="fa fa-star checked"></span>
+            <br /> -->
+        </div>
         <br />
-    </div>
-    <br />
-    <div class="recipes">
-        <div style="float: right;">Time</div>
-        <br />Recipe #2 <br /><br />
-        <span class="fa fa-star checked"></span>
-        <span class="fa fa-star checked"></span>
-        <span class="fa fa-star checked"></span>
-        <span class="fa fa-star checked"></span>
-        <span class="fa fa-star"></span>
+        <div class="recipes">
+            <!-- <div style="float: right;">Time</div> -->
+            <br />Recipe #2 <br /><br />
+            <span class="fa fa-star checked"></span>
+            <span class="fa fa-star checked"></span>
+            <span class="fa fa-star checked"></span>
+            <span class="fa fa-star checked"></span>
+            <span class="fa fa-star"></span>
+            <br />
+        </div>
         <br />
-    </div>
-    <br />
 
-    <div class="recipes">
-        <div style="float: right;">Time</div>
-        <br />Recipe #3 <br /><br />
-        <span class="fa fa-star checked"></span>
-        <span class="fa fa-star checked"></span>
-        <span class="fa fa-star checked"></span>
-        <span class="fa fa-star"></span>
-        <span class="fa fa-star"></span>
+        <div class="recipes">
+            <!-- <div style="float: right;">Time</div> -->
+            <br />Recipe #3 <br /><br />
+            <span class="fa fa-star checked"></span>
+            <span class="fa fa-star checked"></span>
+            <span class="fa fa-star checked"></span>
+            <span class="fa fa-star"></span>
+            <span class="fa fa-star"></span>
+            <br />
+        </div>
         <br />
-    </div>
-    <br />
 
-    <div class="recipes">
-        <div style="float: right;">Time</div>
-        <br />Recipe #4 <br /><br />
-        <span class="fa fa-star checked"></span>
-        <span class="fa fa-star checked"></span>
-        <span class="fa fa-star"></span>
-        <span class="fa fa-star"></span>
-        <span class="fa fa-star"></span>
-        <br />
+        <div class="recipes">
+            <!-- <div style="float: right;">Time</div> -->
+            <br />Recipe #4 <br /><br />
+            <span class="fa fa-star checked"></span>
+            <span class="fa fa-star checked"></span>
+            <span class="fa fa-star"></span>
+            <span class="fa fa-star"></span>
+            <span class="fa fa-star"></span>
+            <br />
+        </div>
     </div>
 
     <script>
@@ -143,20 +143,37 @@
         function parseChoices() {
             var counter = 0;
             db.collection('recipes').get().then(function (snapshot) {
-                snapshot.forEach(function(doc) {
-                    //Checks if document contains all elements of ingredients. Can't get .where() to work.
-                    if (checker(doc.data().ingredients, choices)) {
-                        var tempDiv = document.createElement("div");
-                        tempDiv.innerHTML = doc.data().name;
-                        tempDiv.className = "recipes";
-                        console.log("Code goes heeeeeeeeeere");
-                        document.getElementById("recipe_container").appendChild(tempDiv);
-                    };
-                })
+                var divs = document.querySelectorAll('div')
+                console.log("length" + divs.length);
+                for (var i = 0; i < divs.length - 1; i++) {
+                    snapshot.forEach(function (doc) {
+                        //Checks if document contains all elements of ingredients. Can't get .where() to work.
+                        if (checker(doc.data().ingredients, choices)) {
+                            var tempDiv = document.createElement("div");
+
+                            var arr = [];
+                            var data = doc.data().name;
+                            arr.push(data);
+                            console.log(arr);
+                            for (j = 0; j < arr.length; j++) {
+                                tempDiv.innerHTML = arr[j];
+                                tempDiv.className = "recipes";
+                                console.log("Code goes heeeeeeeeeere");
+                                divs[i].appendChild(tempDiv);
+                            }
+
+                        } else {
+                            console.log("Doesn't print anything");
+                        }
+
+
+
+                    })
+                }
+
             });
         }
         parseChoices();
-
     </script>
 </body>
 
