@@ -51,7 +51,7 @@
             margin-left: 10%;
             width: 80%;
             background-color: white;
-
+            border:solid;
         }
     </style>
 </head>
@@ -128,6 +128,14 @@
     </div>
 
     <script>
+        firebase.auth().onAuthStateChanged(function(user) {
+          if (user) {
+            $('#loginIndicator').text("Sign Out");
+            console.log(user);
+          } else {
+                $('#loginIndicator').text("Sign In");
+          }
+        });
         let checker = (arr, target) => target.every(v => arr.includes(v));
         //Choices that were passed on to us
         var choices = JSON.parse(localStorage.getItem("choices"));
