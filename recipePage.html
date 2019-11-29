@@ -79,52 +79,7 @@
     <p id="dec">
         <br />Here are the recipes based on your ingredients selected:<br /><br />
     </p>
-    <div id="recipe-container">
-        <div class="recipes">
-            <!-- <div style="float: right;">Time</div> -->
-            <!-- <br />Recipe #1 <br /><br />
-            <span class="fa fa-star checked"></span>
-            <span class="fa fa-star checked"></span>
-            <span class="fa fa-star checked"></span>
-            <span class="fa fa-star checked"></span>
-            <span class="fa fa-star checked"></span>
-            <br /> -->
-        </div>
-        <br />
-        <div class="recipes">
-            <!-- <div style="float: right;">Time</div> -->
-            <br />Recipe #2 <br /><br />
-            <span class="fa fa-star checked"></span>
-            <span class="fa fa-star checked"></span>
-            <span class="fa fa-star checked"></span>
-            <span class="fa fa-star checked"></span>
-            <span class="fa fa-star"></span>
-            <br />
-        </div>
-        <br />
-
-        <div class="recipes">
-            <!-- <div style="float: right;">Time</div> -->
-            <br />Recipe #3 <br /><br />
-            <span class="fa fa-star checked"></span>
-            <span class="fa fa-star checked"></span>
-            <span class="fa fa-star checked"></span>
-            <span class="fa fa-star"></span>
-            <span class="fa fa-star"></span>
-            <br />
-        </div>
-        <br />
-
-        <div class="recipes">
-            <!-- <div style="float: right;">Time</div> -->
-            <br />Recipe #4 <br /><br />
-            <span class="fa fa-star checked"></span>
-            <span class="fa fa-star checked"></span>
-            <span class="fa fa-star"></span>
-            <span class="fa fa-star"></span>
-            <span class="fa fa-star"></span>
-            <br />
-        </div>
+    <div id="recipe_container">
     </div>
 
     <script>
@@ -136,41 +91,23 @@
                 $('#loginIndicator').text("Sign In");
           }
         });
-        let checker = (arr, target) => target.every(v => arr.includes(v));
+         let checker = (arr, target) => target.every(v => arr.includes(v));
         //Choices that were passed on to us
         var choices = JSON.parse(localStorage.getItem("choices"));
         //function that should generate divs. 
         function parseChoices() {
             var counter = 0;
             db.collection('recipes').get().then(function (snapshot) {
-                var divs = document.querySelectorAll('div')
-                console.log("length" + divs.length);
-                for (var i = 0; i < divs.length - 1; i++) {
-                    snapshot.forEach(function (doc) {
-                        //Checks if document contains all elements of ingredients. Can't get .where() to work.
-                        if (checker(doc.data().ingredients, choices)) {
-                            var tempDiv = document.createElement("div");
-
-                            var arr = [];
-                            var data = doc.data().name;
-                            arr.push(data);
-                            console.log(arr);
-                            for (j = 0; j < arr.length; j++) {
-                                tempDiv.innerHTML = arr[j];
-                                tempDiv.className = "recipes";
-                                console.log("Code goes heeeeeeeeeere");
-                                divs[i].appendChild(tempDiv);
-                            }
-
-                        } else {
-                            console.log("Doesn't print anything");
-                        }
-
-
-
-                    })
-                }
-
+                snapshot.forEach(function(doc) {
+                    //Checks if document contains all elements of ingredients. Can't get .where() to work.
+                    if (checker(doc.data().ingredients, choices)) {
+                        var tempDiv = document.createElement("div");
+                        tempDiv.innerHTML = doc.data().name;
+                        tempDiv.className = "recipes";
+                        console.log("Code goes heeeeeeeeeere");
+                        document.getElementById("recipe_container").appendChild(tempDiv);
+                    };
+                })
             });
         }
         parseChoices();
