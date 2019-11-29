@@ -11,13 +11,13 @@
     <link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/3.5.2/firebaseui.css" />
     <script>
         var firebaseConfig = {
-            apiKey: "AIzaSyCJTf1-8PVxe2_WjgPXZXNhTrqZwqQhAcQ",
-            authDomain: "adamsawuss.firebaseapp.com",
-            databaseURL: "https://adamsawuss.firebaseio.com",
-            projectId: "adamsawuss",
-            storageBucket: "adamsawuss.appspot.com",
-            messagingSenderId: "15278214023",
-            appId: "1:15278214023:web:d7483f38c760f8d4caa122"
+            apiKey: "AIzaSyB8_rgXNr8HKUS5EEj8orWw8CsfuH_abXA",
+            authDomain: "quick-c73d3.firebaseapp.com",
+            databaseURL: "https://quick-c73d3.firebaseio.com",
+            projectId: "quick-c73d3",
+            storageBucket: "quick-c73d3.appspot.com",
+            messagingSenderId: "886931690680",
+            appId: "1:886931690680:web:833bfd4b71e4bedf7c104d"
         };
         firebase.initializeApp(firebaseConfig);
     </script>
@@ -93,7 +93,7 @@
             <a class="nav-link" href="#!">Follow us</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="QuickCookLogInPage.html">Sign out</a>
+            <a class="nav-link" id="loginIndicator" href="QuickCookLogInPage.html">Sign</a>
         </li>
     </ul>
     </nav>
@@ -132,6 +132,14 @@
 
     
     <script>
+        firebase.auth().onAuthStateChanged(function(user) {
+          if (user) {
+            $('#loginIndicator').text("Sign Out");
+            console.log(user);
+          } else {
+                $('#loginIndicator').text("Sign In");
+          }
+        });
         var choices = [];
         $("#submitForm").on("click", function(event) {
             console.log("heyo");

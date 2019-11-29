@@ -3,7 +3,7 @@
 
 <head>
 
-    <title>My BCIT Project</title>
+    <title>Review</title>
     <!-- Insert these scripts at the bottom of the HTML, but before you use any Firebase services -->
 
     <!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
@@ -121,6 +121,16 @@
 
 
     <script>
+        var tempUser;
+        firebase.auth().onAuthStateChanged(function(user) {
+          if (user) {
+            $('#loginIndicator').text("Sign Out");
+            tempUser = user;
+            console.log(user);
+          } else {
+                $('#loginIndicator').text("Sign In");
+          }
+        });
         //Script for creating a review and adding it to firebase.
         
         var overallTempRating = 0;
@@ -139,7 +149,7 @@
                 db.collection("recipes").doc("yPjNIQwpl23G46YQK6xu").collection("reviews").add({
                     overallRating: overallTempRating,
                     cookTime: time,
-                    author: "someguy",
+                    author: tempUser.uid,
                     text: text,
                     title: "A recipe"
                 }).then(function() {window.location.replace("submit.html");}); 
