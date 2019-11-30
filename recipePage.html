@@ -104,6 +104,15 @@
         //Choices that were passed on to us
         var choices = JSON.parse(localStorage.getItem("choices"));
         //function that should generate divs. 
+        var id = ""
+        $("div").on("click", function(event) {
+            if (event.target.className === "recipes") {
+                id = event.target.id;
+                localStorage.setItem("currentDoc", id);
+
+
+            }
+        });
         function parseChoices() {
             var counter = 0;
             db.collection('recipes').get().then(function (snapshot) {
@@ -112,23 +121,16 @@
                     if (checker(doc.data().ingredients, choices)) {
                         var tempDiv = document.createElement("div");
                         tempDiv.innerHTML = doc.data().name;
+                        tempDiv.id = doc.id
                         tempDiv.className = "recipes";
                         console.log("Code goes here");
                         document.getElementById("recipe_container").appendChild(tempDiv);
-                        var tempP = document.createElement("p");
-                        tempP.innerHTML = doc.id;
-                        tempP.className = "hidden";
-                        tempDiv.appendChild(tempP);
-                        tempDiv.addEventListener("click", function (e) {
-                            localStorage.setItem("currentDoc", tempP.innerHTML);
-                            console.log(tempP.innerHTML);
-                            window.location.replace("recipeDisplay.html");
 
-                        })
                     };
                 })
-            });
-        }
+            })
+        };
+        
         parseChoices();
     </script>
 

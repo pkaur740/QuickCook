@@ -135,11 +135,11 @@
     </div>
     <br>
     <script>
-        var currentDoc = localStorage.getItem("chosenDoc");
+        var currentDoc = localStorage.getItem("currentDoc");
         console.log(currentDoc);
 
         function reviewList() {
-            db.collection("recipes").doc("DmKA9VSlc61LNQWZKfQl").collection("reviews").get().then(function (snap) {
+            db.collection("recipes").doc(currentDoc.replace(/['"]+/g, '')).collection("reviews").get().then(function (snap) {
                 snap.forEach(review => {
                     var n = review.data().text;
                     var rating = review.data().overallRating;
@@ -171,8 +171,8 @@
         }
         reviewList();
 
-        function chosenDoc() {
-            db.collection('recipes').doc("DmKA9VSlc61LNQWZKfQl").get().then(function (snapshot) {
+        function makeSteps() {
+            db.collection('recipes').doc(currentDoc.replace(/['"]+/g, '')).get().then(function (snapshot) {
                 console.log(snapshot.data().name);
                 var s = document.createElement("div");
                 s.innerHTML = snapshot.data().name;
@@ -191,7 +191,7 @@
             })
 
         }
-        chosenDoc();
+        makeSteps();
     </script>
 </body>
 
