@@ -108,7 +108,7 @@
         <input type="radio" id="starhalf" name="rating" value=".5" /><label class="half" for="starhalf" title="Sucks big time - 0.5 stars"></label>
     </fieldset>
 
-    <form id="textArea" onsubmit="return createReview();">
+    <form id="textArea" onsubmit="return createReview(); return false;">
         <textarea id="text" class="form-control form-control-lg" value="" style="height: 20vh;" type="text" placeholder="" required="required"></textarea>
         <h5>Cook Time - Optional</h5>
         <input id="time" style="width: 15vw;" type="number" name="time" min="1" max="600">
@@ -121,14 +121,15 @@
 
 
     <script>
+        var currentDoc = localStorage.getItem("currentDoc");
         var tempUser;
         firebase.auth().onAuthStateChanged(function(user) {
           if (user) {
-            $('#loginIndicator').text("Sign Out");
+
             tempUser = user;
             console.log(user);
           } else {
-                $('#loginIndicator').text("Sign In");
+
           }
         });
         //Script for creating a review and adding it to firebase.
@@ -139,6 +140,7 @@
             overallTempRating = event.target.value;
             console.log(overallTempRating);
         });
+        
         function createReview() {
             if (!hasClicked && ($('#text').val()) && overallTempRating != 0) {
                 console.log("hello");
@@ -146,7 +148,7 @@
                 var text = $('#text').val();
                 var time = $('#time').val();
 
-                db.collection("recipes").doc("DmKA9VSlc61LNQWZKfQl").collection("reviews").add({
+                db.collection("recipes").doc(currentDoc.replace(/['"]+/g, '')).collection("reviews").add({
                     overallRating: overallTempRating,
                     cookTime: time,
                     author: tempUser.email,
@@ -154,10 +156,8 @@
                     title: "A recipe"
                 }).then(function() {window.location.replace("recipeDisplay.html");}); 
 
-                return false;
             }
             return false;
-            
         }
     </script>
 </body>
