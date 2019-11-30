@@ -50,8 +50,17 @@
         .recipes {
             margin-left: 10%;
             width: 80%;
+            height: 100px;
+            margin-top: 10%;
             background-color: white;
-            border:solid;
+            border: solid #EF8872;
+            text-align: center;
+            padding-top: 5%;
+            font-size: 26px;
+        }
+
+        .hidden {
+            visibility: hidden;
         }
     </style>
 </head>
@@ -83,35 +92,47 @@
     </div>
 
     <script>
-        firebase.auth().onAuthStateChanged(function(user) {
-          if (user) {
-            $('#loginIndicator').text("Sign Out");
-            console.log(user);
-          } else {
+        firebase.auth().onAuthStateChanged(function (user) {
+            if (user) {
+                $('#loginIndicator').text("Sign Out");
+                console.log(user);
+            } else {
                 $('#loginIndicator').text("Sign In");
-          }
+            }
         });
-         let checker = (arr, target) => target.every(v => arr.includes(v));
+        let checker = (arr, target) => target.every(v => arr.includes(v));
         //Choices that were passed on to us
         var choices = JSON.parse(localStorage.getItem("choices"));
         //function that should generate divs. 
         function parseChoices() {
             var counter = 0;
             db.collection('recipes').get().then(function (snapshot) {
-                snapshot.forEach(function(doc) {
+                snapshot.forEach(function (doc) {
                     //Checks if document contains all elements of ingredients. Can't get .where() to work.
                     if (checker(doc.data().ingredients, choices)) {
                         var tempDiv = document.createElement("div");
                         tempDiv.innerHTML = doc.data().name;
                         tempDiv.className = "recipes";
-                        console.log("Code goes heeeeeeeeeere");
+                        console.log("Code goes here");
                         document.getElementById("recipe_container").appendChild(tempDiv);
+                        var tempP = document.createElement("p");
+                        tempP.innerHTML = doc.id;
+                        tempP.className = "hidden";
+                        tempDiv.appendChild(tempP);
+                        tempDiv.addEventListener("click", function (e) {
+                            localStorage.setItem("currentDoc", tempP.innerHTML);
+                            console.log(tempP.innerHTML);
+                            window.location.replace("recipeDisplay.html");
+
+                        })
                     };
                 })
             });
         }
         parseChoices();
     </script>
+
+
 </body>
 
 </html>

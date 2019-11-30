@@ -40,6 +40,7 @@
         .header {
             text-align: center;
         }
+
         .scrollspy-example {
             margin: auto;
             background-color: white;
@@ -50,36 +51,51 @@
             width: 80%;
 
         }
+
         #dec {
             color: white;
+            padding-top: 5%;
+            font-size: 16pt;
             background-color: #EF8872;
             text-align: center;
             width: 80%;
+            height: 80px;
             margin-left: 10%;
         }
+
         .recipes {
             margin-left: 10%;
             width: 80%;
             background-color: white;
         }
+
         .review {
             background-color: red;
             border-style: solid;
             width: 80%;
             margin: auto;
         }
+
         #navbar-example2 {
             width: 80%;
             margin: auto;
         }
+
         .fa {
             font-size: 20px;
+        }
+
+        .stepDec {
+            background-color: rgb(255, 255, 255);
+            margin: 5% 10%;
+            padding: 3%;
+
         }
     </style>
 </head>
 
 <body style="background-color: #A4EBE9;">
-    
+
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01"
             aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
@@ -100,74 +116,82 @@
     <br /><br />
 
     <div id="dec">
-        <br />Recipe: <br /><br />
     </div>
 
-    <div class="recipes">
-        <br />Step #1 <br /><br />
-        <br />
+    <div id="step">
     </div>
-    <br />
-    <div class="recipes">
-        <br />Step #2 <br /><br />
-        <br />
-    </div>
-    <br />
 
-    <div class="recipes">
-        <br />Step #3 <br /><br />
-        <br />
-    </div>
-    <br />
 
-    <div class="recipes">
-        <br />Step #4 <br /><br />
-        <br />
-    </div>
-    <br>
-    <nav id="navbar-example2" class="navbar navbar-light bg-light">
+    <!-- <nav id="navbar-example2" class="navbar navbar-light bg-light">
 
-    <h3 class="navbar-brand">Project Name</h3>
-    </nav>
+        <h3 class="navbar-brand">Project Name</h3>
+    </nav> -->
     <form action="review.html">
-        <button style="margin-left: 10%; margin-top: 1vh;" type="submit" class="btn btn-primary">Rate And Review</button>
+        <button style="margin-left: 10%; margin-top: 1vh;" type="submit" class="btn btn-primary">Rate And
+            Review</button>
     </form>
-    <div data-spy="scroll" style="height: 50vh;" data-target="#navbar-example2" id="review_container" data-offset="0" class="scrollspy-example">
+    <div data-spy="scroll" style="height: 50vh;" data-target="#navbar-example2" id="review_container" data-offset="0"
+        class="scrollspy-example">
     </div>
     <br>
     <script>
-    function reviewList() {
-        db.collection("recipes").doc("yPjNIQwpl23G46YQK6xu").collection("reviews").get().then(function(snap) {
+        var currentDoc = localStorage.getItem("chosenDoc");
+        console.log(currentDoc);
+
+        function reviewList() {
+            db.collection("recipes").doc("DmKA9VSlc61LNQWZKfQl").collection("reviews").get().then(function (snap) {
                 snap.forEach(review => {
-                var n = review.data().text;
-                var rating = review.data().overallRating;
-                var temph4 = document.createElement("h4");
-                var tempDiv = document.createElement("div");
-                var tempStar = document.createElement("div");
-                while (rating > 0) {
-                    if (rating >= 1) {
-                        var tempSpan = document.createElement("span");
-                        tempSpan.className = "fa fa-star checked";
-                        tempStar.appendChild(tempSpan);
-                        rating -= 1;
-                    } else if (rating > 0.4) {
-                        var tempSpan = document.createElement("span");
-                        tempSpan.className = "fa fa-star-half-o checked";
-                        tempStar.appendChild(tempSpan);
-                        rating -= 0.5;
+                    var n = review.data().text;
+                    var rating = review.data().overallRating;
+                    var temph4 = document.createElement("h4");
+                    var tempDiv = document.createElement("div");
+                    var tempStar = document.createElement("div");
+                    while (rating > 0) {
+                        if (rating >= 1) {
+                            var tempSpan = document.createElement("span");
+                            tempSpan.className = "fa fa-star checked";
+                            tempStar.appendChild(tempSpan);
+                            rating -= 1;
+                        } else if (rating > 0.4) {
+                            var tempSpan = document.createElement("span");
+                            tempSpan.className = "fa fa-star-half-o checked";
+                            tempStar.appendChild(tempSpan);
+                            rating -= 0.5;
+                        }
                     }
-                }
-                tempDiv.innerHTML = n;
-                
-                temph4.innerHTML = review.data().author;
-                document.getElementById("review_container").appendChild(temph4);
+                    tempDiv.innerHTML = n;
+
+                    temph4.innerHTML = review.data().author;
+                    document.getElementById("review_container").appendChild(temph4);
                     document.getElementById("review_container").appendChild(tempStar);
-                document.getElementById("review_container").appendChild(tempDiv);
-                
+                    document.getElementById("review_container").appendChild(tempDiv);
+
+                })
             })
-        })
-    }
+        }
         reviewList();
+
+        function chosenDoc() {
+            db.collection('recipes').doc("DmKA9VSlc61LNQWZKfQl").get().then(function (snapshot) {
+                console.log(snapshot.data().name);
+                var s = document.createElement("div");
+                s.innerHTML = snapshot.data().name;
+                document.getElementById("dec").appendChild(s);
+
+                console.log(snapshot.data().steps);
+                var tempD = document.createElement("div");
+                for (var i = 0; i < snapshot.data().steps.length; i++) {
+                    console.log(snapshot.data().steps[i]);
+                    var tempD = document.createElement("div");
+                    tempD.innerHTML = snapshot.data().steps[i];
+                    tempD.className = "stepDec";
+                    document.getElementById("step").appendChild(tempD);
+                }
+
+            })
+
+        }
+        chosenDoc();
     </script>
 </body>
 

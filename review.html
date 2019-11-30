@@ -146,13 +146,13 @@
                 var text = $('#text').val();
                 var time = $('#time').val();
 
-                db.collection("recipes").doc("yPjNIQwpl23G46YQK6xu").collection("reviews").add({
+                db.collection("recipes").doc("DmKA9VSlc61LNQWZKfQl").collection("reviews").add({
                     overallRating: overallTempRating,
                     cookTime: time,
-                    author: tempUser.uid,
+                    author: tempUser.email,
                     text: text,
                     title: "A recipe"
-                }).then(function() {window.location.replace("submit.html");}); 
+                }).then(function() {window.location.replace("recipeDisplay.html");}); 
 
                 return false;
             }
