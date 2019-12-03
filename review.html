@@ -121,6 +121,7 @@
 
 
     <script>
+        var docName = localStorage.getItem("docName");
         var currentDoc = localStorage.getItem("currentDoc");
         var tempUser;
         firebase.auth().onAuthStateChanged(function(user) {
@@ -149,12 +150,20 @@
                 var time = $('#time').val();
 
                 db.collection("recipes").doc(currentDoc.replace(/['"]+/g, '')).collection("reviews").add({
+                    recipeName: docName,
                     overallRating: overallTempRating,
                     cookTime: time,
                     author: tempUser.email,
                     text: text,
                     title: "A recipe"
-                }).then(function() {window.location.replace("recipeDisplay.html");}); 
+                }).then(function(docRef) {
+                    db.collection("users").doc(tempUser.uid).collection("reviews").add({
+                        recipeID: currentDoc,
+                        reviewID: docRef.id
+                }).then(function() {
+                    window.location.replace("recipeDisplay.html");
+                })
+                }); 
 
             }
             return false;

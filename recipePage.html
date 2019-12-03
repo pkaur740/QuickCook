@@ -108,7 +108,9 @@
         $("div").on("click", function(event) {
             if (event.target.className === "recipes") {
                 id = event.target.id;
+
                 localStorage.setItem("currentDoc", id);
+                localStorage.setItem("docName", event.target.innerHTML);
                 window.location.replace("recipeDisplay.html");
 
 

@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Recipe History</title>
+    <script src="https://www.gstatic.com/firebasejs/7.2.2/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.2.2/firebase-analytics.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.2.2/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.2.2/firebase-firestore.js"></script>
+    <script src="https://cdn.firebase.com/libs/firebaseui/3.5.2/firebaseui.js"></script>
+    <link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/3.5.2/firebaseui.css" />
+    <script>
+        var firebaseConfig = {
+            apiKey: "AIzaSyB8_rgXNr8HKUS5EEj8orWw8CsfuH_abXA",
+            authDomain: "quick-c73d3.firebaseapp.com",
+            databaseURL: "https://quick-c73d3.firebaseio.com",
+            projectId: "quick-c73d3",
+            storageBucket: "quick-c73d3.appspot.com",
+            messagingSenderId: "886931690680",
+            appId: "1:886931690680:web:833bfd4b71e4bedf7c104d"
+        };
+        firebase.initializeApp(firebaseConfig);
+        var db = firebase.firestore();
+    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <style type="text/css" scoped>
+
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        .checked {
+            color: orange;
+        }
+    </style>
+    <style>
+        .header {
+            text-align: center;
+        }
+
+        .scrollspy-example {
+            margin: auto;
+            background-color: white;
+            position: relative;
+            height: 200px;
+            margin-top: .5rem;
+            overflow: auto;
+            width: 80%;
+
+        }
+
+        #dec {
+            color: white;
+            padding-top: 5%;
+            font-size: 16pt;
+            background-color: #EF8872;
+            text-align: center;
+            width: 80%;
+            height: 80px;
+            margin-left: 10%;
+        }
+
+        .recipes {
+            margin-left: 10%;
+            width: 80%;
+            background-color: white;
+        }
+
+        .review {
+            background-color: red;
+            border-style: solid;
+            width: 80%;
+            margin: auto;
+        }
+
+        #navbar-example2 {
+            width: 80%;
+            margin: auto;
+        }
+
+        .fa {
+            font-size: 20px;
+        }
+
+        .stepDec {
+            background-color: rgb(255, 255, 255);
+            margin: 5% 10%;
+            padding: 3%;
+
+        }
+    </style>
+</head>
+
+<body style="background-color: #A4EBE9;">
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01"
+            aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="navbar-collapse collapse" id="navbarTogglerDemo01" style="">
+            <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+                <li class="nav-item active">
+                    <a class="nav-link" href="#!">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link disabled" href="#!">Disabled</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <br /><br />
+
+    <div id="dec">
+    </div>
+
+    <div id="step">
+    </div>
+
+
+    <div data-spy="scroll" style="height: 50vh;" data-target="#navbar-example2" id="review_container" data-offset="0"
+        class="scrollspy-example">
+    </div>
+    <br>
+    <script>
+        var tempUser;
+        firebase.auth().onAuthStateChanged(function(user) {
+          if (user) {
+
+            tempUser = user;
+            console.log(user);
+              
+            //Gets list of reviews and dumps them into html.
+            function reviewList() {
+                //Takes a list of all reviews under user review collection and then runs through each of them.
+            db.collection("users").doc(tempUser.uid).collection("reviews").get().then(function (snap) {
+                snap.forEach(review => {
+                    console.log(review.data());
+                    //Refers to the recipe reciprocal review collection and pulls data from it. Then prints into divs.
+                    var docRef = db.collection("recipes").doc(review.data().recipeID).collection("reviews").doc(review.data().reviewID);
+                    docRef.get().then(function(doc) {
+                        if (doc.exists) {
+                            var rating = doc.data().overallRating;
+                            var tempP = document.createElement("p");
+                            var temph3 = document.createElement("h3");
+                            var temph4 = document.createElement("h4");
+                            var tempDiv = document.createElement("div");
+                            var tempStar = document.createElement("div");
+                            while (rating > 0) {
+                                if (rating >= 1) {
+                                    var tempSpan = document.createElement("span");
+                                    tempSpan.className = "fa fa-star checked";
+                                    tempStar.appendChild(tempSpan);
+                                    rating -= 1;
+                                } else if (rating > 0.4) {
+                                    var tempSpan = document.createElement("span");
+                                    tempSpan.className = "fa fa-star-half-o checked";
+                                    tempStar.appendChild(tempSpan);
+                                    rating -= 0.5;
+                                }
+                            }
+                            tempP.innerHTML = doc.data().text;
+                            temph3.innerHTML = doc.data().recipeName;
+                            temph4.innerHTML = doc.data().author;
+                            tempDiv.appendChild(temph3);
+                            tempDiv.appendChild(temph4);
+                            tempDiv.appendChild(tempStar);
+                            tempDiv.appendChild(tempP);
+                            document.getElementById("review_container").appendChild(tempDiv);
+                        } else {
+                            console.log("something went wrong");
+                        }
+                    });
+                    
+
+                    })
+                })
+            }
+            reviewList();
+          } else {
+
+          }
+        });
+
+        
+
+    </script>
+</body>
+
+</html>
