@@ -1,0 +1,23 @@
+#dec {
+    color: white;
+    background-color: #EF8872;
+    text-align: center;
+    width: 80%;
+    margin-left: 10%;
+}
+
+.recipes {
+    margin-left: 10%;
+    width: 80%;
+    height: 100px;
+    margin-top: 10%;
+    background-color: white;
+    border: solid #EF8872;
+    text-align: center;
+    padding-top: 5%;
+    font-size: 26px;
+}
+
+.hidden {
+    visibility: hidden;
+}

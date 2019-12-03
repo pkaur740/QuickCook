@@ -23,6 +23,7 @@
         var db = firebase.firestore();
     </script>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" type="text/css" href="css/style.css"/>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
@@ -38,31 +39,7 @@
             color: orange;
         }
     </style>
-    <style>
-        #dec {
-            color: white;
-            background-color: #EF8872;
-            text-align: center;
-            width: 80%;
-            margin-left: 10%;
-        }
 
-        .recipes {
-            margin-left: 10%;
-            width: 80%;
-            height: 100px;
-            margin-top: 10%;
-            background-color: white;
-            border: solid #EF8872;
-            text-align: center;
-            padding-top: 5%;
-            font-size: 26px;
-        }
-
-        .hidden {
-            visibility: hidden;
-        }
-    </style>
 </head>
 
 <body style="background-color: #A4EBE9;">
@@ -74,20 +51,25 @@
         <span class="navbar-collapse collapse" id="navbarTogglerDemo01" style="">
             <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
                 <li class="nav-item active">
-                    <a class="nav-link" href="#!">Home <span class="sr-only">(current)</span></a>
+                    <a class="nav-linkk" href="index.html">Home <span class="sr-only">(current)</span></a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link disabled" href="#!">Disabled</a>
+                <li class="nav-item active">
+                    <a class="nav-linkk" href="aboutUs.html">About Us</a>
                 </li>
+                <li class="nav-item active">
+                    <script src="scripts/logout-user.js">logout()</script>
+                    <a class="nav-linkk" id="signOut">Log out</a>
+                </li>
+                
             </ul>
         </span>
     </nav>
 
     <br /><br />
 
-    <p id="dec">
-        <br />Here are the recipes based on your ingredients selected:<br /><br />
-    </p>
+    <div id="dec">
+        <br/>Here are the recipes based on your ingredients selected:
+    </div>
     <div id="recipe_container">
     </div>
 
@@ -105,15 +87,14 @@
         var choices = JSON.parse(localStorage.getItem("choices"));
         //function that should generate divs. 
         var id = ""
-        $("div").on("click", function(event) {
+        $("div").on("click", function (event) {
             if (event.target.className === "recipes") {
                 id = event.target.id;
                 localStorage.setItem("currentDoc", id);
                 window.location.replace("recipeDisplay.html");
-
-
             }
         });
+
         function parseChoices() {
             var counter = 0;
             db.collection('recipes').get().then(function (snapshot) {
@@ -131,7 +112,7 @@
                 })
             })
         };
-        
+
         parseChoices();
     </script>
 

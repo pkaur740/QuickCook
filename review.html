@@ -33,114 +33,75 @@
         var db = firebase.firestore();
     </script>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" type="text/css" href="css/style.css"/>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <style>
-        
-        #container {
-            width: 80%;
-            margin: auto;
-        }
-
-
-
-.rating { 
-  border: none;
-  float: left;
-}
-
-.rating > input { display: none; } 
-.rating > label:before { 
-  margin: 5px;
-  font-size: 1.25em;
-  font-family: FontAwesome;
-  display: inline-block;
-  content: "\f005";
-}
-
-.rating > .half:before { 
-  content: "\f089";
-  position: absolute;
-}
-
-.rating > label { 
-  color: #ddd; 
- float: right; 
-}
-
-/***** CSS Magic to Highlight Stars on Hover *****/
-
-.rating > input:checked ~ label, /* show gold star when clicked */
-.rating:not(:checked) > label:hover, /* hover current star */
-.rating:not(:checked) > label:hover ~ label { color: #FFD700;  } /* hover previous stars in list */
-
-.rating > input:checked + label:hover, /* hover current star when changing rating */
-.rating > input:checked ~ label:hover,
-.rating > label:hover ~ input:checked ~ label, /* lighten current selection */
-.rating > input:checked ~ label:hover ~ label { color: #FFED85;  } 
-.full {
-    font-size: 24px;
-}
-.half {
-    font-size: 24px;
-}
-</style>
+    
 </head>
 
-<body>
-    
+<body style = "background-color: #A4EBE9;">
+
     <div id="container">
-    <h1>Review</h1>
-    <h2>Rating</h2>
-    <fieldset class="rating">
-        <input type="radio" id="star5" name="rating" value="5" /><label class = "full" for="star5" title="Awesome - 5 stars"></label>
-        <input type="radio" id="star4half" name="rating" value="4.5" /><label class="half" for="star4half" title="Pretty good - 4.5 stars"></label>
-        <input type="radio" id="star4" name="rating" value="4" /><label class = "full" for="star4" title="Pretty good - 4 stars"></label>
-        <input type="radio" id="star3half" name="rating" value="3.5" /><label class="half" for="star3half" title="Meh - 3.5 stars"></label>
-        <input type="radio" id="star3" name="rating" value="3" /><label class = "full" for="star3" title="Meh - 3 stars"></label>
-        <input type="radio" id="star2half" name="rating" value="2.5" /><label class="half" for="star2half" title="Kinda bad - 2.5 stars"></label>
-        <input type="radio" id="star2" name="rating" value="2" /><label class = "full" for="star2" title="Kinda bad - 2 stars"></label>
-        <input type="radio" id="star1half" name="rating" value="1.5" /><label class="half" for="star1half" title="Meh - 1.5 stars"></label>
-        <input type="radio" id="star1" name="rating" value="1" /><label class = "full" for="star1" title="Sucks big time - 1 star"></label>
-        <input type="radio" id="starhalf" name="rating" value=".5" /><label class="half" for="starhalf" title="Sucks big time - 0.5 stars"></label>
-    </fieldset>
+        <br/><h1 style="color: white">Review</h1>
+        <h6 style= "color: #EF8872">Please rate the recipe</h6>
+        <fieldset class="rating">
+            <input type="radio" id="star5" name="rating" value="5" /><label class="full" for="star5"
+                title="Awesome - 5 stars"></label>
+            <input type="radio" id="star4half" name="rating" value="4.5" /><label class="half" for="star4half"
+                title="Pretty good - 4.5 stars"></label>
+            <input type="radio" id="star4" name="rating" value="4" /><label class="full" for="star4"
+                title="Pretty good - 4 stars"></label>
+            <input type="radio" id="star3half" name="rating" value="3.5" /><label class="half" for="star3half"
+                title="Meh - 3.5 stars"></label>
+            <input type="radio" id="star3" name="rating" value="3" /><label class="full" for="star3"
+                title="Meh - 3 stars"></label>
+            <input type="radio" id="star2half" name="rating" value="2.5" /><label class="half" for="star2half"
+                title="Kinda bad - 2.5 stars"></label>
+            <input type="radio" id="star2" name="rating" value="2" /><label class="full" for="star2"
+                title="Kinda bad - 2 stars"></label>
+            <input type="radio" id="star1half" name="rating" value="1.5" /><label class="half" for="star1half"
+                title="Meh - 1.5 stars"></label>
+            <input type="radio" id="star1" name="rating" value="1" /><label class="full" for="star1"
+                title="Sucks big time - 1 star"></label>
+            <input type="radio" id="starhalf" name="rating" value=".5" /><label class="half" for="starhalf"
+                title="Sucks big time - 0.5 stars"></label>
+        </fieldset>
 
-    <form id="textArea" onsubmit="return createReview(); return false;">
-        <textarea id="text" class="form-control form-control-lg" value="" style="height: 20vh;" type="text" placeholder="" required="required"></textarea>
-        <h5>Cook Time - Optional</h5>
-        <input id="time" style="width: 15vw;" type="number" name="time" min="1" max="600">
+        <form id="textArea" onsubmit="return createReview();">
+            <textarea id="text" class="form-control form-control-lg" value="" style="height: 20vh;" type="text"
+                placeholder="Type text here" required="required"></textarea>
+            <br/><br/><h6>Cook Time - Optional</h6>
+            <input id="time" style="width: 15vw;" type="number" name="time" min="1" max="600">
 
-        <button type="submit" style="margin-top: 2vh;" class="btn btn-primary btn-lg btn-block">Submit</button>
-        
-    
-    </form>
-</div>
+            <button type="submit" style="margin-top: 2vh; background-color: #EF8872;" class="btn btn-primary btn-lg btn-block">Submit</button>
 
+
+        </form>
+    </div>
 
     <script>
-        var currentDoc = localStorage.getItem("currentDoc");
         var tempUser;
-        firebase.auth().onAuthStateChanged(function(user) {
-          if (user) {
-
-            tempUser = user;
-            console.log(user);
-          } else {
-
-          }
+        firebase.auth().onAuthStateChanged(function (user) {
+            if (user) {
+                $('#loginIndicator').text("Sign Out");
+                tempUser = user;
+                console.log(user);
+            } else {
+                $('#loginIndicator').text("Sign In");
+            }
         });
         //Script for creating a review and adding it to firebase.
-        
+
         var overallTempRating = 0;
         var hasClicked = false;
-        $("input").on("click", function(event) {
+        $("input").on("click", function (event) {
             overallTempRating = event.target.value;
             console.log(overallTempRating);
         });
-        
+
         function createReview() {
             if (!hasClicked && ($('#text').val()) && overallTempRating != 0) {
                 console.log("hello");
@@ -148,17 +109,22 @@
                 var text = $('#text').val();
                 var time = $('#time').val();
 
-                db.collection("recipes").doc(currentDoc.replace(/['"]+/g, '')).collection("reviews").add({
+                db.collection("recipes").doc("DmKA9VSlc61LNQWZKfQl").collection("reviews").add({
                     overallRating: overallTempRating,
                     cookTime: time,
                     author: tempUser.email,
                     text: text,
                     title: "A recipe"
-                }).then(function() {window.location.replace("submit.html");}); 
+                }).then(function () {
+                    window.location.replace("recipeDisplay.html");
+                });
 
+                return false;
             }
             return false;
+
         }
+
     </script>
 </body>
 

@@ -23,6 +23,7 @@
         var db = firebase.firestore();
     </script>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" type="text/css" href="css/style.css"/>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
@@ -34,62 +35,6 @@
     <style>
         .checked {
             color: orange;
-        }
-    </style>
-    <style>
-        .header {
-            text-align: center;
-        }
-
-        .scrollspy-example {
-            margin: auto;
-            background-color: white;
-            position: relative;
-            height: 200px;
-            margin-top: .5rem;
-            overflow: auto;
-            width: 80%;
-
-        }
-
-        #dec {
-            color: white;
-            padding-top: 5%;
-            font-size: 16pt;
-            background-color: #EF8872;
-            text-align: center;
-            width: 80%;
-            height: 80px;
-            margin-left: 10%;
-        }
-
-        .recipes {
-            margin-left: 10%;
-            width: 80%;
-            background-color: white;
-        }
-
-        .review {
-            background-color: red;
-            border-style: solid;
-            width: 80%;
-            margin: auto;
-        }
-
-        #navbar-example2 {
-            width: 80%;
-            margin: auto;
-        }
-
-        .fa {
-            font-size: 20px;
-        }
-
-        .stepDec {
-            background-color: rgb(255, 255, 255);
-            margin: 5% 10%;
-            padding: 3%;
-
         }
     </style>
 </head>
@@ -104,10 +49,14 @@
         <div class="navbar-collapse collapse" id="navbarTogglerDemo01" style="">
             <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
                 <li class="nav-item active">
-                    <a class="nav-link" href="#!">Home <span class="sr-only">(current)</span></a>
+                    <a class="nav-linkk" href="index.html">Home <span class="sr-only">(current)</span></a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link disabled" href="#!">Disabled</a>
+                <li class="nav-item active">
+                    <a class="nav-linkk" href="aboutUs.html">About Us</a>
+                </li>
+                <li class="nav-item active">
+                    <script src="scripts/logout-user.js">logout()</script>
+                    <a class="nav-linkk" id="signOut">Log out</a>
                 </li>
             </ul>
         </div>
@@ -115,7 +64,7 @@
 
     <br /><br />
 
-    <div id="dec">
+    <div id="decor">
     </div>
 
     <div id="step">
@@ -127,7 +76,7 @@
         <h3 class="navbar-brand">Project Name</h3>
     </nav> -->
     <form action="review.html">
-        <button style="margin-left: 10%; margin-top: 1vh;" type="submit" class="btn btn-primary">Rate And
+        <button style="margin-left: 10%; margin-top: 1vh; background-color: lightsalmon; width:40%" type="submit" class="btn btn-primary">Rate And
             Review</button>
     </form>
     <div data-spy="scroll" style="height: 50vh;" data-target="#navbar-example2" id="review_container" data-offset="0"
@@ -139,7 +88,8 @@
         console.log(currentDoc);
 
         function reviewList() {
-            db.collection("recipes").doc(currentDoc.replace(/['"]+/g, '')).collection("reviews").get().then(function (snap) {
+            db.collection("recipes").doc(currentDoc.replace(/['"]+/g, '')).collection("reviews").get().then(function (
+                snap) {
                 snap.forEach(review => {
                     var n = review.data().text;
                     var rating = review.data().overallRating;
@@ -176,10 +126,10 @@
                 console.log(snapshot.data().name);
                 var s = document.createElement("div");
                 s.innerHTML = snapshot.data().name;
-                document.getElementById("dec").appendChild(s);
+                document.getElementById("decor").appendChild(s);
 
                 console.log(snapshot.data().steps);
-                var tempD = document.createElement("div");
+                var tempD = document.createElement("p");
                 for (var i = 0; i < snapshot.data().steps.length; i++) {
                     console.log(snapshot.data().steps[i]);
                     var tempD = document.createElement("div");
