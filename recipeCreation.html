@@ -20,6 +20,7 @@
             appId: "1:886931690680:web:833bfd4b71e4bedf7c104d"
         };
         firebase.initializeApp(firebaseConfig);
+        var db = firebase.firestore();
     </script>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
@@ -70,7 +71,7 @@
             margin: auto;
         }
         button {
-            width: 24vw;
+            width: 18vw;
             background-color: #0BD1F4;
         }
         .btn-primary {
@@ -79,6 +80,10 @@
         .nav-link {
             background-color: #37C8E2;
             color: white;
+        }
+        .step_list {
+            border: 1px solid #d4d4d4;
+            background-color: white;
         }
     </style>
 </head>
@@ -93,9 +98,6 @@
             <a class="nav-link" href="#!">Follow us</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link"  href="recipeCreation.html">Make your own recipe!</a>
-        </li>
-        <li class="nav-item">
             <a class="nav-link" id="loginIndicator" href="QuickCookLogInPage.html">Sign</a>
         </li>
     </ul>
@@ -106,9 +108,12 @@
     <br>
     <br>
     <div id="background-div">
+        <h1>Make Your Own Recipe!</h1>
+        <h2 style="color: red" id="notify"></h2>
         <br>
         <br>
         <br>
+        <input id="recipeName" value="" class="form-control mb-2 mr-sm-2" type="text" placeholder="Enter Name">
 
         <form autocomplete="off" id="form" style="text-align: center;" onsubmit="return createListing(); this.reset(); return false;">
             <div class="autocomplete" style="width: 80vw; margin: auto; display: flex; align-items: center; justify-content: center;">
@@ -117,14 +122,24 @@
             </div>
         </form>
         <br>
-
+    
     
     
     <br>
     <div id="ingredient-list">
         
     </div>
+    <form id="textArea" onsubmit="return createStep();">
+        <textarea id="text" class="form-control form-control-lg" value="" style="height: 20vh;" type="text" placeholder="" required="required"></textarea>
+
+        <button id="stepSubmit" type="button" style="margin-top: 2vh;" class="btn btn-primary btn-lg btn-block">Submit</button>
+        
+    </form>
     <br>
+        
+    <div id="step-list">
+        
+    </div>
     <br>
     <form id="submitForm" style="text-align: center;" onsubmit="return false;">
         <input id="submit" class="btn btn-secondary " type="submit" value="Search" style="width: 70vw;">
@@ -135,22 +150,46 @@
 
     
     <script>
+        var tempUser;
         firebase.auth().onAuthStateChanged(function(user) {
           if (user) {
             $('#loginIndicator').text("Sign Out");
-            console.log(user);
+                console.log(user);
+                tempUser = user;
           } else {
                 $('#loginIndicator').text("Sign In");
           }
         });
         var choices = [];
+        var stepList = [];
         $("#submitForm").on("click", function(event) {
-            console.log("heyo");
-            localStorage.setItem("choices", JSON.stringify(choices));
-            window.location.href = "recipePage.html";
-            for (index = 0; index < choices.length; index++) { 
-                console.log(choices[index]); 
-            } 
+            if (tempUser) {
+            var name = $('#recipeName').val();
+            db.collection("recipes").add({
+                    ingredients: choices,
+                    steps: stepList,
+                    name: name,
+                    author: tempUser.email,
+                }).then(function() {
+                    window.location.replace("index.html");
+                });
+            } else {
+                $('#notify').text("Please login first");
+            }
+            return false;
+        });
+        $("#stepSubmit").on("click", function(event) {
+            var element = document.createElement("div");
+            var tempP = document.createElement("p");
+            var text = $('#text').val();
+            $('#text').val("");
+            tempP.innerHTML = text;
+            tempP.className = "step_list";
+            stepList.push(text);
+            console.log(stepList);
+            element.appendChild(tempP);
+            document.getElementById('step-list').appendChild(element);
+            return false;
         });
         function createListing() {
             var element = document.createElement("button");
@@ -164,86 +203,99 @@
                 $('form input[type="text"]').val('');
             }
             return false;
+        }
+        
+        function createStep() {
+            var element = document.createElement("div");
+            var tempP = document.createElement("p");
+            var text = $('#text').val();
             
+            tempP.innerHTML = text;
+            stepsList.push(text);
+            console.log(steps);
+            element.appendChild(tempP);
+            document.getElementById('step-list').appendChild(element);
+            return false;
         }
         $('form input').keydown(function(e) {
             setTimeout(function(){
                 if (e.keyCode == 13) {
-                    $('form').submit();
+                    $('#form').submit();
                 }
             }, 50); 
         });
-    function autocomplete(input, array) {
-        var currentFocus;
-        input.addEventListener("input", function(e) {
-            var a, b, i, val = this.value;
-            closeAllLists();
-            if (!val) {
-                return false;
-            }
-            currentFocus = -1;
-            a = document.createElement("DIV");
-            a.setAttribute("id", this.id + "autocomplete-list");
-            a.setAttribute("class", "autocomplete-items");
-            this.parentNode.appendChild(a);
-            for (i = 0; i<array.length; i++) {
-                if (array[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
-                    b = document.createElement("DIV");
-                    b.innerHTML = "<strong>" + array[i].substr(0, val.length) + "<strong>";
-                    b.innerHTML += array[i].substr(val.length);
-                    b.innerHTML += "<input type = 'hidden' value='" + array[i] + "'>";
-                    b.addEventListener("click", function(e) {
-                        input.value = this.getElementsByTagName("input")[0].value;
-                        closeAllLists();
-                    });
-                    a.appendChild(b);
+        function autocomplete(input, array) {
+            var currentFocus;
+            input.addEventListener("input", function(e) {
+                var a, b, i, val = this.value;
+                closeAllLists();
+                if (!val) {
+                    return false;
                 }
-            }
-        });
-        input.addEventListener("keydown", function(e) {
-            var x = document.getElementById(this.id + "autocomplete-list");
-            if (x)
-                x = x.getElementsByTagName("div");
+                currentFocus = -1;
+                a = document.createElement("DIV");
+                a.setAttribute("id", this.id + "autocomplete-list");
+                a.setAttribute("class", "autocomplete-items");
+                this.parentNode.appendChild(a);
+                for (i = 0; i<array.length; i++) {
+                    if (array[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
+                        b = document.createElement("DIV");
+                        b.innerHTML = "<strong>" + array[i].substr(0, val.length) + "<strong>";
+                        b.innerHTML += array[i].substr(val.length);
+                        b.innerHTML += "<input type = 'hidden' value='" + array[i] + "'>";
+                        b.addEventListener("click", function(e) {
+                            input.value = this.getElementsByTagName("input")[0].value;
+                            closeAllLists();
+                        });
+                        a.appendChild(b);
+                    }
+                }
+            });
+            input.addEventListener("keydown", function(e) {
+                var x = document.getElementById(this.id + "autocomplete-list");
+                if (x)
+                    x = x.getElementsByTagName("div");
 
-            if (e.keyCode == 40) {
-                currentFocus++;
-                addActive(x);
-            } else if (e.keyCode == 38) {
-                currentFocus--;
-                addActive(x);
-                
-            } else if (e.keyCode == 13) {
-                e.preventDefault();
-                if (currentFocus > -1) {
-                    if (x) x[currentFocus].click();
+                if (e.keyCode == 40) {
+                    currentFocus++;
+                    addActive(x);
+                } else if (e.keyCode == 38) {
+                    currentFocus--;
+                    addActive(x);
+
+                } else if (e.keyCode == 13) {
+                    e.preventDefault();
+                    if (currentFocus > -1) {
+                        if (x) x[currentFocus].click();
+                    }
+
                 }
+            });
+            function  addActive(x) {
+                if (!x) return false;
+                removeActive(x);
+                if (currentFocus >= x.length) currentFocus = 0;
+                if (currentFocus < 0) currentFocus = (x.length - 1);
+                x[currentFocus].classList.add("autocomplete-active");
+            }
+            function removeActive(x) {
+                for (var i = 0; i < x.length; i++) {
+                    x[i].classList.remove("autocomplete-active");
+                }
+            }
+            function closeAllLists(element) {
+                var x = document.getElementsByClassName("autocomplete-items");
+                for (var i = 0; i < x.length; i++) {
+                    if (element != x[i] && element != input) {
+                        x[i].parentNode.removeChild(x[i]);
+                    }
+                }
+            }
+            document.addEventListener("click", function(e) {
+                closeAllLists(e.target);
+            });
+        }
         
-            }
-        });
-        function  addActive(x) {
-            if (!x) return false;
-            removeActive(x);
-            if (currentFocus >= x.length) currentFocus = 0;
-            if (currentFocus < 0) currentFocus = (x.length - 1);
-            x[currentFocus].classList.add("autocomplete-active");
-        }
-        function removeActive(x) {
-            for (var i = 0; i < x.length; i++) {
-                x[i].classList.remove("autocomplete-active");
-            }
-        }
-        function closeAllLists(element) {
-            var x = document.getElementsByClassName("autocomplete-items");
-            for (var i = 0; i < x.length; i++) {
-                if (element != x[i] && element != input) {
-                    x[i].parentNode.removeChild(x[i]);
-                }
-            }
-        }
-        document.addEventListener("click", function(e) {
-            closeAllLists(e.target);
-        });
-    }
     var ingredients = ["cheese", "bread", "spam",  "carrots"];
     autocomplete(document.getElementById("myInput"), ingredients);
 
