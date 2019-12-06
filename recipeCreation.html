@@ -23,79 +23,23 @@
         var db = firebase.firestore();
     </script>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" type="text/css" href="css/style.css"/>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-    <style>
-        body {
-        }
-        .autocomplete {
-            position: relative;
-            display: inline-block;
-        }
-        .autocomplete-items {
-            position: absolute;
-            border: 1px solid #d4d4d4;
-            border-bottom: none;
-            border-top: none;
-            z-index: 99;
-            /*position the autocomplete items to be the same width as the container:*/
-            top: 100%;
-            left: 0;
-            right: 0;
-        }
-        .autocomplete-items div {
-            padding: 10px;
-            cursor: pointer;
-            background-color: #fff; 
-            border-bottom: 1px solid #d4d4d4; 
-        }
-        .autocomplete-items div:hover {
-          background-color: #e9e9e9; 
-        }
-
-        /*when navigating through the items using the arrow keys:*/
-        .autocomplete-active {
-          background-color: DodgerBlue !important; 
-          color: #ffffff;
-        }
-        #background-div {
-            background-image: url('https://www.thanksgiving.com/wp-content/uploads/2019/07/sugar-cubes-spoon-teal-background-400x300.jpg');
-            width: 100vw;
-            margin-top: -5vh;
-        }
-        #ingredient-list {
-            text-align: center;
-            width: 70vw;
-            margin: auto;
-        }
-        button {
-            width: 18vw;
-            background-color: #0BD1F4;
-        }
-        .btn-primary {
-            background-color: #37C8E2;
-        }
-        .nav-link {
-            background-color: #37C8E2;
-            color: white;
-        }
-        .step_list {
-            border: 1px solid #d4d4d4;
-            background-color: white;
-        }
-    </style>
+  
+        
 </head>
 
-<body>
+<body style = "background-image: url(https://image.freepik.com/free-vector/blurred-turquoise-background-design_1107-187.jpg);">
     <nav>
     <ul class="nav nav-pills ">
         <li class="nav-item ">
-            <a class="nav-link" href="#!">About us</a>
+            <a class="nav-link" href="aboutUs.html">About us</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="#!">Follow us</a>
+            <a class="nav-link" href="followUs.html">Follow us</a>
         </li>
         <li class="nav-item">
             <a class="nav-link" id="loginIndicator" href="QuickCookLogInPage.html">Sign</a>
@@ -107,8 +51,8 @@
     </div>
     <br>
     <br>
-    <div id="background-div">
-        <h1>Make Your Own Recipe!</h1>
+    <div>
+        <h1 style = "text-align: center; color: white;">Make Your Own Recipe!</h1>
         <h2 style="color: red" id="notify"></h2>
         <br>
         <br>
@@ -118,7 +62,7 @@
         <form autocomplete="off" id="form" style="text-align: center;" onsubmit="return createListing(); this.reset(); return false;">
             <div class="autocomplete" style="width: 80vw; margin: auto; display: flex; align-items: center; justify-content: center;">
                 <input id="myInput" value="" class="form-control mb-2 mr-sm-2" type="text" placeholder="Enter Ingredients">
-                <button type="submit" class="btn btn-primary mb-2">Submit</button>
+                <button type="submit" class="btn btn-primary mb-2">Enter</button>
             </div>
         </form>
         <br>
@@ -132,7 +76,7 @@
     <form id="textArea" onsubmit="return createStep();">
         <textarea id="text" class="form-control form-control-lg" value="" style="height: 20vh;" type="text" placeholder="" required="required"></textarea>
 
-        <button id="stepSubmit" type="button" style="margin-top: 2vh;" class="btn btn-primary btn-lg btn-block">Submit</button>
+        <button id="stepSubmit" type="button" style="margin-top: 2vh;" class="btn btn-primary btn-lg btn-block">Enter</button>
         
     </form>
     <br>
@@ -142,7 +86,7 @@
     </div>
     <br>
     <form id="submitForm" style="text-align: center;" onsubmit="return false;">
-        <input id="submit" class="btn btn-secondary " type="submit" value="Search" style="width: 70vw;">
+        <input id="submit" class="btn btn-secondary " type="submit" value="Submit" style="width: 70vw;">
     </form>
     <br>
     <br>
@@ -296,7 +240,7 @@
             });
         }
         
-    var ingredients = ["cheese", "bread", "spam",  "carrots"];
+    var ingredients = ["cheese", "bread", "salt", "spam", "carrots", "chocolate", "honey", "sugar"];
     autocomplete(document.getElementById("myInput"), ingredients);
 
     </script>
