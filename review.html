@@ -110,23 +110,20 @@
                 hasClicked = true;
                 var text = $('#text').val();
                 var time = $('#time').val();
-
-<<<<<<< HEAD
+                
                 db.collection("recipes").doc("DmKA9VSlc61LNQWZKfQl").collection("reviews").add({
-=======
+
                 db.collection("recipes").doc(currentDoc.replace(/['"]+/g, '')).collection("reviews").add({
                     recipeName: docName,
->>>>>>> e9f7f8e99ada4a7f08866488d9aa2f01351e352b
                     overallRating: overallTempRating,
                     cookTime: time,
                     author: tempUser.email,
                     text: text,
                     title: "A recipe"
-<<<<<<< HEAD
                 }).then(function () {
                     window.location.replace("recipeDisplay.html");
                 });
-=======
+
                 }).then(function(docRef) {
                     db.collection("users").doc(tempUser.uid).collection("reviews").add({
                         recipeID: currentDoc,
@@ -135,7 +132,6 @@
                     window.location.replace("recipeDisplay.html");
                 })
                 }); 
->>>>>>> e9f7f8e99ada4a7f08866488d9aa2f01351e352b
 
                 return false;
             }
