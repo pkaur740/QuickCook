@@ -104,10 +104,14 @@
         <div class="navbar-collapse collapse" id="navbarTogglerDemo01" style="">
             <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
                 <li class="nav-item active">
-                    <a class="nav-link" href="#!">Home <span class="sr-only">(current)</span></a>
+                    <a class="nav-linkk" href="index.html">Home <span class="sr-only">(current)</span></a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link disabled" href="#!">Disabled</a>
+                <li class="nav-item active">
+                    <a class="nav-linkk" href="aboutUs.html">About Us</a>
+                </li>
+                <li class="nav-item active">
+                    <script src="scripts/logout-user.js">logout()</script>
+                    <a class="nav-linkk" id="signOut">Log out</a>
                 </li>
             </ul>
         </div>
@@ -150,6 +154,8 @@
                             var temph4 = document.createElement("h4");
                             var tempDiv = document.createElement("div");
                             var tempStar = document.createElement("div");
+                            //Code for initiating the ratings. Uses font-awesome for the actual stars.
+                            //Takes ratings and make a full star for every 1 rating, and a half star for less than 1. 
                             while (rating > 0) {
                                 if (rating >= 1) {
                                     var tempSpan = document.createElement("span");

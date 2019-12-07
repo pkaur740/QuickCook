@@ -73,8 +73,6 @@
         <form id="textArea" onsubmit="return createReview();">
             <textarea id="text" class="form-control form-control-lg" value="" style="height: 20vh;" type="text"
                 placeholder="Type text here" required="required"></textarea>
-            <br/><br/><h6>Cook Time - Optional</h6>
-            <input id="time" style="width: 15vw;" type="number" name="time" min="1" max="600">
 
             <button type="submit" style="margin-top: 2vh; background-color: #EF8872;" class="btn btn-primary btn-lg btn-block">Submit</button>
 
@@ -87,6 +85,7 @@
         var docName = localStorage.getItem("docName");
         var currentDoc = localStorage.getItem("currentDoc");
         var tempUser;
+        //Gets the current user and assigns it to a tempUser.
         firebase.auth().onAuthStateChanged(function (user) {
             if (user) {
                 $('#loginIndicator').text("Sign Out");
@@ -97,25 +96,22 @@
             }
         });
         //Script for creating a review and adding it to firebase.
-
         var overallTempRating = 0;
         var hasClicked = false;
         $("input").on("click", function (event) {
             overallTempRating = event.target.value;
             console.log(overallTempRating);
         });
-
+        //Pulls data from what the user has input and creates a document with that data. Then redirects back to the recipe display. 
         function createReview() {
             if (!hasClicked && ($('#text').val()) && overallTempRating != 0) {
                 console.log("hello");
                 hasClicked = true;
                 var text = $('#text').val();
-                var time = $('#time').val();
 
                 db.collection("recipes").doc(currentDoc.replace(/['"]+/g, '')).collection("reviews").add({
                     recipeName: docName,
                     overallRating: overallTempRating,
-                    cookTime: time,
                     author: tempUser.email,
                     text: text,
                     title: "A recipe"

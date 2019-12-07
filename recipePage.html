@@ -74,6 +74,7 @@
     </div>
 
     <script>
+        //User detection and init.
         firebase.auth().onAuthStateChanged(function (user) {
             if (user) {
                 $('#loginIndicator').text("Sign Out");
@@ -82,11 +83,13 @@
                 $('#loginIndicator').text("Sign In");
             }
         });
+        //Function for checking whether ingredients exist in the recipe.
         let checker = (arr, target) => target.every(v => arr.includes(v));
         //Choices that were passed on to us
         var choices = JSON.parse(localStorage.getItem("choices"));
         //function that should generate divs. 
-        var id = ""
+        var id = "";
+        //Jquery for detecting clicks on recipe divs.
         $("div").on("click", function (event) {
             if (event.target.className === "recipes") {
                 id = event.target.id;
@@ -96,7 +99,9 @@
                 window.location.replace("recipeDisplay.html");
             }
         });
-
+        //Function for parsing the recipe collection for options with all ingredients.
+        //Originally we used .where but we had difficulty getting it to query whether all contents of an array existed.
+        //Our solution was to just go through all documents in the collection and check with our own function.
         function parseChoices() {
             var counter = 0;
             db.collection('recipes').get().then(function (snapshot) {
@@ -114,7 +119,7 @@
                 })
             })
         };
-
+        //Initiates parseChoices.
         parseChoices();
     </script>
 

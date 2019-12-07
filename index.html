@@ -46,7 +46,9 @@
         </li>
         <li class="nav-item">
             <a class="nav-link"  href="recipeCreation.html">Make your own recipe!</a>
-
+        </li>
+        <li class="nav-item">
+            <a class="nav-link"  href="recipeHistory.html">Check your recipe history!</a>
         </li>
     </ul>
     </nav>
@@ -85,6 +87,7 @@
 
     
     <script>
+        //User check and button init
         firebase.auth().onAuthStateChanged(function(user) {
           if (user) {
             $('#loginIndicator').text("Sign Out");
@@ -94,6 +97,7 @@
           }
         });
         var choices = [];
+        //Code for submitting ingredient choices and redirecting to recipe page.
         $("#submitForm").on("click", function(event) {
             console.log("heyo");
             localStorage.setItem("choices", JSON.stringify(choices));
@@ -102,6 +106,7 @@
                 console.log(choices[index]); 
             } 
         });
+        //Code for generating the ingredient elements so the user knows what ingredients they selected.
         function createListing() {
             var element = document.createElement("button");
             var text = $('form input[type="text"]').val()
@@ -116,6 +121,7 @@
             return false;
             
         }
+        //Jquery for clicking enter.
         $('form input').keydown(function(e) {
             setTimeout(function(){
                 if (e.keyCode == 13) {
@@ -123,79 +129,87 @@
                 }
             }, 50); 
         });
-    function autocomplete(input, array) {
-        var currentFocus;
-        input.addEventListener("input", function(e) {
-            var a, b, i, val = this.value;
-            closeAllLists();
-            if (!val) {
-                return false;
-            }
-            currentFocus = -1;
-            a = document.createElement("DIV");
-            a.setAttribute("id", this.id + "autocomplete-list");
-            a.setAttribute("class", "autocomplete-items");
-            this.parentNode.appendChild(a);
-            for (i = 0; i<array.length; i++) {
-                if (array[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
-                    b = document.createElement("DIV");
-                    b.innerHTML = "<strong>" + array[i].substr(0, val.length) + "<strong>";
-                    b.innerHTML += array[i].substr(val.length);
-                    b.innerHTML += "<input type = 'hidden' value='" + array[i] + "'>";
-                    b.addEventListener("click", function(e) {
-                        input.value = this.getElementsByTagName("input")[0].value;
-                        closeAllLists();
-                    });
-                    a.appendChild(b);
+        //Code for the autocomplete function in the ingredient selection.
+        function autocomplete(input, array) {
+            var currentFocus;
+            input.addEventListener("input", function(e) {
+                var a, b, i, val = this.value;
+                closeAllLists();
+                if (!val) {
+                    return false;
                 }
-            }
-        });
-        input.addEventListener("keydown", function(e) {
-            var x = document.getElementById(this.id + "autocomplete-list");
-            if (x)
-                x = x.getElementsByTagName("div");
+                currentFocus = -1;
+                a = document.createElement("DIV");
+                a.setAttribute("id", this.id + "autocomplete-list");
+                a.setAttribute("class", "autocomplete-items");
+                this.parentNode.appendChild(a);
+                for (i = 0; i<array.length; i++) {
+                    if (array[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
+                        b = document.createElement("DIV");
+                        b.innerHTML = "<strong>" + array[i].substr(0, val.length) + "<strong>";
+                        b.innerHTML += array[i].substr(val.length);
+                        b.innerHTML += "<input type = 'hidden' value='" + array[i] + "'>";
+                        b.addEventListener("click", function(e) {
+                            input.value = this.getElementsByTagName("input")[0].value;
+                            closeAllLists();
+                        });
+                        a.appendChild(b);
+                    }
+                }
+            });
+            //Checks the autocomplete focus, does different things to move focus up and down.
+            input.addEventListener("keydown", function(e) {
+                var x = document.getElementById(this.id + "autocomplete-list");
+                if (x)
+                    x = x.getElementsByTagName("div");
 
-            if (e.keyCode == 40) {
-                currentFocus++;
-                addActive(x);
-            } else if (e.keyCode == 38) {
-                currentFocus--;
-                addActive(x);
-                
-            } else if (e.keyCode == 13) {
-                e.preventDefault();
-                if (currentFocus > -1) {
-                    if (x) x[currentFocus].click();
+                if (e.keyCode == 40) {
+                    currentFocus++;
+                    addActive(x);
+                } else if (e.keyCode == 38) {
+                    currentFocus--;
+                    addActive(x);
+
+                } else if (e.keyCode == 13) {
+                    e.preventDefault();
+                    if (currentFocus > -1) {
+                        if (x) x[currentFocus].click();
+                    }
+
                 }
-        
+            });
+            //Adds an active list.
+            function  addActive(x) {
+                if (!x) return false;
+                removeActive(x);
+                if (currentFocus >= x.length) currentFocus = 0;
+                if (currentFocus < 0) currentFocus = (x.length - 1);
+                x[currentFocus].classList.add("autocomplete-active");
             }
-        });
-        function  addActive(x) {
-            if (!x) return false;
-            removeActive(x);
-            if (currentFocus >= x.length) currentFocus = 0;
-            if (currentFocus < 0) currentFocus = (x.length - 1);
-            x[currentFocus].classList.add("autocomplete-active");
-        }
-        function removeActive(x) {
-            for (var i = 0; i < x.length; i++) {
-                x[i].classList.remove("autocomplete-active");
-            }
-        }
-        function closeAllLists(element) {
-            var x = document.getElementsByClassName("autocomplete-items");
-            for (var i = 0; i < x.length; i++) {
-                if (element != x[i] && element != input) {
-                    x[i].parentNode.removeChild(x[i]);
+            //Removes the current active list.
+            function removeActive(x) {
+                for (var i = 0; i < x.length; i++) {
+                    x[i].classList.remove("autocomplete-active");
                 }
             }
+            //Closes all open lists for autocomplete.
+            function closeAllLists(element) {
+                var x = document.getElementsByClassName("autocomplete-items");
+                for (var i = 0; i < x.length; i++) {
+                    if (element != x[i] && element != input) {
+                        x[i].parentNode.removeChild(x[i]);
+                    }
+                }
+            }
+            //Detects whether the user clicked, closes the autocomplete list if so.
+            document.addEventListener("click", function(e) {
+                closeAllLists(e.target);
+            });
         }
-        document.addEventListener("click", function(e) {
-            closeAllLists(e.target);
-        });
-    }
-    var ingredients = ["cheese", "bread", "spam", "carrots", "chocolate", "honey", "sugar", "peas"];
-    autocomplete(document.getElementById("myInput"), ingredients);
+        //A list of ingredients that the user can select, also used by autocomplete. Can be expanded at will.
+        var ingredients = ["cheese", "bread", "spam", "carrots", "chocolate", "honey", "sugar", "peas"];
+        //Initiates the autocomplete script.
+        autocomplete(document.getElementById("myInput"), ingredients);
 
     </script>
 </body>

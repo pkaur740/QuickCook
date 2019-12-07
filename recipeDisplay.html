@@ -86,7 +86,8 @@
     <script>
         var currentDoc = localStorage.getItem("currentDoc");
         console.log(currentDoc);
-
+        //Pulls data from the recipe, using the currentDoc from localstorage to decide which document to look at.
+        //The value from currentDoc has to be scrubbed of quotation marks so that firebase doesn't complain.
         function reviewList() {
             db.collection("recipes").doc(currentDoc.replace(/['"]+/g, '')).collection("reviews").get().then(function (
                 snap) {
@@ -120,7 +121,8 @@
             })
         }
         reviewList();
-
+        //Reads the steps variable from the recipe document to generate divs with step data.
+        //Steps is an array.
         function makeSteps() {
             db.collection('recipes').doc(currentDoc.replace(/['"]+/g, '')).get().then(function (snapshot) {
                 console.log(snapshot.data().name);
